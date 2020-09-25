@@ -3,13 +3,13 @@ DROP TABLE IF EXISTS "public"."Desk";
 
 CREATE TABLE "public"."Employee" (
   id SERIAL PRIMARY KEY NOT NULL,
-  name VARCHAR(255),
+  name VARCHAR(255) NOT NULL,
   email VARCHAR(255) UNIQUE NOT NULL
 );
 CREATE TABLE "public"."Desk" (
   id SERIAL PRIMARY KEY NOT NULL,
   title VARCHAR(255) NOT NULL,
-  "employeeId" INTEGER NOT NULL,
+  "employeeId" INTEGER,
   FOREIGN KEY ("employeeId") REFERENCES "public"."Employee"(id)
 );
 

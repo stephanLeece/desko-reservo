@@ -8,15 +8,15 @@ datasource db {
 }
 
 model Desk {
-  id         Int      @default(autoincrement()) @id
+  id         Int       @default(autoincrement()) @id
   title      String
-  employeeId Int
-  Employee   Employee @relation(fields: [employeeId], references: [id])
+  employeeId Int?
+  Employee   Employee? @relation(fields: [employeeId], references: [id])
 }
 
 model Employee {
-  id    Int     @default(autoincrement()) @id
-  name  String?
-  email String  @unique
+  id    Int    @default(autoincrement()) @id
+  name  String
+  email String @unique
   Desk  Desk[]
 }
