@@ -1,17 +1,31 @@
-DROP TABLE IF EXISTS "public"."Employee";
-DROP TABLE IF EXISTS "public"."Desk";
+DROP TABLE IF EXISTS "public"."User" CASCADE;
+DROP TABLE IF EXISTS "public"."Photo" CASCADE;
+DROP TABLE IF EXISTS "public"."Comment" CASCADE;
 
-CREATE TABLE "public"."Employee" (
+CREATE TABLE "public"."User" (
   id SERIAL PRIMARY KEY NOT NULL,
   name VARCHAR(255) NOT NULL,
-  email VARCHAR(255) UNIQUE NOT NULL
+  email VARCHAR(255) NOT NULL
 );
-CREATE TABLE "public"."Desk" (
+
+CREATE TABLE "public"."Photo" (
   id SERIAL PRIMARY KEY NOT NULL,
-  title VARCHAR(255) NOT NULL,
-  "employeeId" INTEGER,
-  FOREIGN KEY ("employeeId") REFERENCES "public"."Employee"(id)
+  name VARCHAR(255) NOT NULL,
+  imgUrl VARCHAR(255) UNIQUE NOT NULL,
+  "userId" INTEGER,
+  FOREIGN KEY ("userId") REFERENCES "public"."User"(id)
 );
+
+CREATE TABLE "public"."Comment" (
+  id SERIAL PRIMARY KEY NOT NULL,
+  text VARCHAR(255) NOT NULL,
+  "photoId" INTEGER,
+  FOREIGN KEY ("photoId") REFERENCES "public"."Photo"(id),
+  "userId" INTEGER,
+  FOREIGN KEY ("userId") REFERENCES "public"."User"(id)
+);
+
+
 
 -- create tables, create prisma schema, create prisma client
 

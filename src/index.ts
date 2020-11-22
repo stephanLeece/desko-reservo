@@ -7,86 +7,92 @@ const app = express()
 
 app.use(bodyParser.json())
 
-app.post(`/employee`, async (req, res) => {
-    const result = await prisma.employee.create({
+// Post requests
+
+app.post(`/register`, async (req, res) => {
+    const result = await prisma.user.create({
         data: {
-            name: "Alice",
-            email: "alice@prisma.io",
+            name: "test user",
+            email: "test email"
         }
     })
     res.json(result)
 })
 
-app.post(`/desk`, async (req, res) => {
-    const result = await prisma.desk.create({
+app.post(`/comment`, async (req, res) => {
+    const result = await prisma.comment.create({
         data: {
-            title: "Desko",
-        }
-    })
-    res.json(result)
-})
-
-app.put('/desk/:id', async (req, res) => {
-    const { id } = req.params
-    const updatedDesk = await prisma.desk.update({
-        where: {
-            id: Number(id),
-        },
-        data: {
-            Employee: {
-                create: {
-                    name: "buddy",
-                    email: "stephan@prisma.io",
+            text: "This is a lovely comment",
+            Photo: {
+                connect: {
+                  id: 1,
                 },
+              },
+              User: {
+                connect: {
+                  id: 1,
+                },
+              },
+        }
+    })
+    res.json(result)
+})
+
+app.post(`/photo`, async (req, res) => {
+    console.log('body massage', req?.body?.data)
+    const result = await prisma.photo.create({
+        data: {
+            name: "lovely photo",
+            imgurl:"lovely image url",
+            User: {
+                connect: {
+                  id: 123,
+                },
+              },
+        }
+    })
+    return res.json(result)
+})
+
+// get requests
+
+app.get(`/photos`, async (req, res) => {
+    const allPhotos = await prisma.photo.findMany()
+    return res.json(allPhotos)
+})
+
+app.get(`/photo:photoId`, async (req, res) => {
+    const id = req.params.photoId;
+    const photoById = await prisma.photo.findOne(
+        {
+            where: {
+                id: parseInt(id),
             },
-        },
-    })
-    res.json(updatedDesk)
+        }
+    )
+    return res.json(photoById)
 })
 
-app.delete(`/employee/:id`, async (req, res) => {
-    const { id } = req.params
-    const deletedEmployee = await prisma.employee.delete({
+app.get(`/photos:userId`, async (req, res) => {
+    const userId = req.params.userId;
+    const photosByUser = await prisma.photo.findMany({
         where: {
-            id: Number(id),
+            userId: parseInt(userId),
         },
     })
-    res.json(deletedEmployee)
+    return res.json(photosByUser)
 })
 
-app.get(`/employee`, async (req, res) => {
-    const allEmployee = await prisma.employee.findMany()
-    res.json(allEmployee)
-})
-
-app.get(`/desk`, async (req, res) => {
-    const allDesks = await prisma.desk.findMany({
-        include: {
-            Employee: true,
-        },
-    })
-    res.json(allDesks)
-})
-
-app.get(`/employee/:id`, async (req, res) => {
-    const { id } = req.params
-    const employee = await prisma.employee.findOne({
+app.get(`/comments:photoId`, async (req, res) => {
+    const photoId = req.params.photoId;
+    const commentsByPhotoId = await prisma.comment.findMany({
         where: {
-            id: Number(id),
-        },
-    })
-    res.json(employee)
+          photoId: parseInt(photoId),
+        }
+      })
+    return res.json(commentsByPhotoId)
 })
 
-app.get(`/desk/:id`, async (req, res) => {
-    const { id } = req.params
-    const desk = await prisma.desk.findOne({
-        where: {
-            id: Number(id),
-        },
-    })
-    res.json(desk)
-})
 
 const server = app.listen(3000, () =>
     console.log(
