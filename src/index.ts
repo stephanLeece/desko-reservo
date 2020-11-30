@@ -94,8 +94,8 @@ app.get(`/comments:photoId`, async (req, res) => {
 })
 
 
-const server = app.listen(3000, () =>
+const server = app.listen(process.env.PORT || 2077, () =>
     console.log(
-        '🚀 Server ready at: http://localhost:3000\n⭐️ See sample requests: http://pris.ly/e/ts/rest-express#3-using-the-rest-api',
+        `Server ready at: http://localhost:2077`,
     ),
 )
