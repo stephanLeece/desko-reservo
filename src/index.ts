@@ -93,9 +93,9 @@ app.get(`/comments:photoId`, async (req, res) => {
     return res.json(commentsByPhotoId)
 })
 
-
+const port = process.env.PORT || 2077;
 const server = app.listen(process.env.PORT || 2077, () =>
     console.log(
-        `Server ready at: http://localhost:2077`,
+        `Server ready at: http://localhost:${port}`,
     ),
 )
